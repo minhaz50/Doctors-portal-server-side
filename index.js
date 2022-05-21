@@ -53,7 +53,7 @@ async function run() {
         const available = service.slots.filter(
           (slot) => !bookedSlots.includes(slot)
         );
-        service.available = available;
+        service.slots = available;
       });
 
       res.send(services);
@@ -68,6 +68,13 @@ async function run() {
      * app.patch('/booking/:id') // update a specific booking
      * app.delete('/booking/:id') // delete a specific booking
      */
+
+    app.get("/booking", async (req, res) => {
+      const patient = req.query.patient;
+      const query = { patient: patient };
+      const bookings = await bookingCollection.find(query).toArray();
+      res.send(bookings);
+    });
 
     app.post("/booking", async (req, res) => {
       const booking = req.body;
